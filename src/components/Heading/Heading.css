@@ -1,0 +1,34 @@
+.heading__text {
+  margin: 0;
+  padding: 70px 0 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+}
+
+.heading__line {
+  width: 100%;
+  margin: 28px 0 4px;
+  border: none;
+  border-top: 1px solid #000;
+}
+
+@media screen and (min-width: 768px) {
+  .heading__text {
+    padding: 90px 0 0;
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+  .heading__line {
+    margin: 23px 0 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .heading__text {
+    padding: 110px 0 0;
+  }
+}

@@ -1,0 +1,54 @@
+.sign-nav {
+  min-height: 59px;
+  padding: 14px 30px 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sign-nav__label {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #a0a0a0;
+  margin-right: 7px;
+}
+
+.sign-nav__link {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #2be080;
+  text-decoration: none;
+}
+
+.sign-nav__link:hover {
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .sign-nav {
+    padding: 16px 186px 232px;
+  }
+
+  .sign-nav__label {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .sign-nav__link {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .sign-nav {
+    padding: 14px 442px 70px;
+  }
+}

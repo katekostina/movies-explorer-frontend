@@ -1,0 +1,64 @@
+.sign-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 24px 14px;
+}
+
+.sign-buttons__signup {
+  display: flex;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 10px;
+  line-height: 16px;
+  color: #000;
+}
+
+.sign-buttons__signin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 26px;
+  background-color: #2be080;
+  border-radius: 3px;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 10px;
+  line-height: 16px;
+  color: #000;
+  margin-left: 14px;
+}
+
+.sign-buttons__signup:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.sign-buttons__signin:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .sign-buttons {
+    margin: 21px 30px;
+  }
+
+  .sign-buttons__signup {
+    font-size: 12px;
+  }
+
+  .sign-buttons__signin {
+    font-size: 12px;
+    margin-left: 30px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .sign-buttons {
+    margin: 21px 70px;
+  }
+}
