@@ -1,21 +1,6 @@
 import './MovieCard.css';
-import { useEffect, useState } from 'react';
 
 function MovieCard({ movie, place, isSaved }) {
-  const [buttonType, setButtonType] = useState();
-
-  useEffect(() => {
-    if (place === 'saved-movies') {
-      setButtonType('cross');
-    } else if (place === 'all-movies') {
-      if (isSaved) {
-        setButtonType('full-heart');
-      } else {
-        setButtonType('empty-heart');
-      }
-    }
-  }, [place, isSaved]);
-
   return (
     <figure className='movie-card'>
       <img src={movie.src} alt={movie.title} className='movie-card__image' />
@@ -24,9 +9,18 @@ function MovieCard({ movie, place, isSaved }) {
           <p className='movie-card__title'>{movie.title}</p>
           <p className='movie-card__length'>{movie.length}</p>
         </div>
-        <button
-          className={`movie-card__btn movie-card__btn_type_${buttonType}`}
-        />
+
+        {place === 'saved-movies' && (
+          <button className='movie-card__btn movie-card__btn_type_cross' />
+        )}
+
+        {place === 'all-movies' && (
+          <button
+            className={`movie-card__btn movie-card__btn_type_${
+              isSaved ? 'full-heart' : 'empty-heart'
+            }`}
+          />
+        )}
       </figcaption>
     </figure>
   );

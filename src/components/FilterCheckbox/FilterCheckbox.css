@@ -22,6 +22,7 @@
   border-radius: 20px;
   background-color: #ebebeb;
   transition: 0.4s;
+  display: block;
 }
 
 .filter-checkbox__slider:before {

@@ -14,6 +14,7 @@ function SearchForm() {
           className='search-form__input'
           placeholder='Фильм'
           type='search'
+          required
         />
         <button className='search-form__button' onClick={handleSearch}>
           Найти
