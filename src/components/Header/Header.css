@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header__home {
+  margin: 18px 14px;
+  width: 38px;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.header__logo {
+  width: 38px;
+  height: 38px;
+}
+
+.header__home:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .header__home {
+    margin: 18px 30px;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .header__home {
+    margin: 18px 20px 18px 30px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .header__home {
+    margin: 18px 44px 18px 70px;
+  }
+}

@@ -1,0 +1,19 @@
+.form {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+@media screen and (min-width: 768px) {
+  .form {
+    padding: 0 186px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .form {
+    padding: 0 442px;
+  }
+}

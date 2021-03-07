@@ -1,0 +1,41 @@
+.form-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.form-header__logo {
+  margin-top: 26px;
+}
+
+.form-header__caption {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  margin: 50px 0;
+}
+
+@media screen and (min-width: 768px) {
+  .form-header {
+    padding: 232px 186px 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .form-header__logo {
+    margin-top: 0;
+  }
+
+  .form-header__caption {
+    margin: 40px 0;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .form-header {
+    padding: 70px 442px 0;
+  }
+}

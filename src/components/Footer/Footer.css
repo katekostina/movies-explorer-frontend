@@ -1,0 +1,121 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.footer__caption {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 15px;
+  color: #a0a0a0;
+  text-align: center;
+  margin: 70px auto 20px;
+}
+
+.footer__line {
+  width: 100%;
+  margin: 0 auto;
+  border: none;
+  border-top: 1px solid #e8e8e8;
+}
+
+.footer__underline-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.footer__social {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.footer__link {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 15px;
+  color: #000;
+  margin-bottom: 12px;
+}
+
+.footer__link:first-of-type {
+  margin-top: 30px;
+}
+
+.footer__link:last-of-type {
+  margin-bottom: 30px;
+}
+
+.footer__copyright {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #a0a0a0;
+  margin: 0 auto;
+}
+
+.footer__link:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .footer {
+    padding: 20px 30px;
+  }
+
+  .footer__caption {
+    font-size: 13px;
+    line-height: 16px;
+    margin: 60px auto 20px;
+  }
+
+  .footer__underline-container {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 20px;
+  }
+
+  .footer__social {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .footer__link {
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+    margin-left: 20px;
+  }
+
+  .footer__link:first-of-type {
+    margin: 0;
+  }
+
+  .footer__link:last-of-type {
+    margin: 0;
+    margin-left: 20px;
+  }
+
+  .footer__copyright {
+    font-size: 13px;
+    line-height: 16px;
+    color: #000;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .footer {
+    padding: 20px 70px;
+    background-color: #fafafa;
+  }
+}

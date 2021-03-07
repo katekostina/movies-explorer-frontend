@@ -1,0 +1,149 @@
+.about-project {
+  display: flex;
+  flex-direction: column;
+  padding: 0 18px;
+}
+
+.about-project__text-sections-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-project__text-section {
+  width: 100%;
+}
+
+.about-project__header-small {
+  margin: 56px 0 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+}
+
+.about-project__paragraph {
+  margin: 16px 0 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  color: #000;
+}
+
+.about-project__graph {
+  margin: 60px 0 70px;
+  display: grid;
+  grid-template-columns: 100fr 184fr;
+  grid-template-rows: min-content min-content;
+  gap: 10px 0px;
+  text-align: center;
+}
+
+.about-project__one-fraction {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #000;
+  background-color: #2be080;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-project__four-fractions {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #000;
+  background-color: #f2f2f2;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-project__caption {
+  margin: 0;
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #a0a0a0;
+}
+
+@media screen and (min-width: 768px) {
+  .about-project {
+    padding: 0 50px;
+  }
+
+  .about-project__text-sections-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .about-project__text-section {
+    width: calc((100% - 30px) / 2);
+  }
+
+  .about-project__header-small {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 70px 0 0;
+  }
+
+  .about-project__paragraph {
+    font-size: 12px;
+    line-height: 18px;
+    margin: 22px 0 0;
+  }
+
+  .about-project__graph {
+    grid-template-columns: 140fr 528fr;
+    gap: 14px 0px;
+    margin: 93px 0 90px;
+  }
+
+  .about-project__one-fraction {
+    font-size: 14px;
+    line-height: 17px;
+    height: 36px;
+  }
+
+  .about-project__four-fractions {
+    font-size: 14px;
+    line-height: 17px;
+    height: 36px;
+  }
+
+  .about-project__caption {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .about-project {
+    padding: 0 70px;
+  }
+
+  .about-project__paragraph {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .about-project__text-section {
+    width: calc((100% - 40px) / 2);
+  }
+
+  .about-project__graph {
+    margin: 110px 0 110px;
+  }
+}
