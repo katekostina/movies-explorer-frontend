@@ -1,7 +1,11 @@
 import './Form.css';
 
-function Form({ children }) {
-  return <form className='form'>{children}</form>;
+function Form({ children, onSubmit }) {
+  return (
+    <form onSubmit={onSubmit} className='form'>
+      {children}
+    </form>
+  );
 }
 
 export default Form;

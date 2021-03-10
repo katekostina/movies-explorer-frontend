@@ -1,7 +1,14 @@
 import './SubmitButton.css';
 
-function SubmitButton({ label }) {
-  return <input className='submit-button' type='submit' value={label} />;
+function SubmitButton({ label, submitPossible }) {
+  return (
+    <input
+      className={`submit-button submit-button_active_${submitPossible}`}
+      type='submit'
+      value={label}
+      disabled={!submitPossible}
+    />
+  );
 }
 
 export default SubmitButton;

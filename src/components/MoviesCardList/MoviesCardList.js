@@ -1,30 +1,33 @@
-import src from '../../images/movie.png';
 import './MoviesCardList.css';
 import MovieCard from '../MovieCard/MovieCard';
+import { useState, useEffect } from 'react';
 
-function MoviesCardList({ place }) {
+function MoviesCardList({ place, movies }) {
+  const [showMovies, setShowMovies] = useState(4);
+
+  function handleMore() {
+    setShowMovies(Math.min(movies.length, showMovies + 4));
+  }
+
   return (
     <section className='movies-card-list'>
-      <MovieCard
-        movie={{
-          src: src,
-          title:
-            'Не грози южному централу, попивая сок у себя в квартале. Не грози южному централу, попивая сок у себя в квартале',
-          length: '1ч 29м',
-        }}
-        place={place}
-        isSaved={true}
-      />
-      <MovieCard
-        movie={{
-          src: src,
-          title: 'Не грози южному централу, попивая сок у себя в квартале',
-          length: '1ч 29м',
-        }}
-        place={place}
-        isSaved={false}
-      />
-      <button className='movies-card-list__more'>Ещё</button>
+      {movies &&
+        movies
+          .slice(0, showMovies)
+          .map((movie) => (
+            <MovieCard
+              movieData={movie}
+              place={place}
+              isSaved={true}
+              key={movie.id}
+            />
+          ))}
+
+      {movies && movies.length > showMovies && (
+        <button className='movies-card-list__more' onClick={handleMore}>
+          Ещё
+        </button>
+      )}
     </section>
   );
 }

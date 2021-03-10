@@ -1,0 +1,23 @@
+.search-info {
+  font-family: 'Inter', 'Helvetica', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 30px;
+  color: #a0a0a0;
+  text-align: center;
+  padding: 14px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 768px) {
+  .search-info {
+    padding: 30px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .search-info {
+    padding: 70px;
+  }
+}

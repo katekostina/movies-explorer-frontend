@@ -4,14 +4,14 @@ import { ReactComponent as Logo } from '../../images/logo.svg';
 import SignButtons from '../SignButtons/SignButtons';
 import Navigation from '../Navigation/Navigation';
 
-function Header({ isLogged }) {
+function Header({ isNavigation }) {
   return (
     <header className='header'>
       <NavLink to='/' className='header__home'>
         <Logo className='header__logo' />
       </NavLink>
-      {isLogged && <Navigation />}
-      {!isLogged && <SignButtons />}
+      {isNavigation && <Navigation />}
+      {!isNavigation && <SignButtons />}
     </header>
   );
 }

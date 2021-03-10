@@ -24,7 +24,7 @@ function Portfolio() {
         className='portfolio__link'
         target='_blank'
         rel='noreferrer'
-        href='https://katekostina.students.nomoreparties.xyz/'>
+        href='https://mesto.katekostina.students.nomoredomains.monster'>
         Одностраничное приложение{' '}
         <span className='portfolio__arrow'> &#8599; </span>
       </a>
