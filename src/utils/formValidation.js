@@ -1,4 +1,4 @@
-const validator = require('email-validator');
+import validator from 'validator';
 
 const nameValidation = (name) => {
   if (name.trim() === '') {
@@ -10,7 +10,7 @@ const emailValidation = (email) => {
   if (email.trim() === '') {
     return 'Введите адрес электронной почты.';
   }
-  if (validator.validate(email)) {
+  if (!validator.isEmail(email)) {
     return 'Введите корректный адрес';
   }
 };

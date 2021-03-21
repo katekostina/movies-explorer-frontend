@@ -11,24 +11,6 @@ function Register({ validate, signUp }) {
   const [errors, setErrors] = useState({});
   const [submitPossible, setSubmitPossible] = useState(true);
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  useEffect(() => {
-    const { email, password } = values;
-    const { emailErr, passwordErr } = values;
-    if (email && password && !emailErr && !passwordErr) {
-      setSubmitPossible(true);
-    } else {
-      setSubmitPossible(false);
-    }
-  }, [errors, values]);
-
   function handleChange(e) {
     const { name, value } = e.target;
     setValues({
@@ -59,6 +41,7 @@ function Register({ validate, signUp }) {
             name='name'
             label='Имя'
             type='text'
+            autoComplete='username'
             value={values.name || ''}
             onChange={handleChange}
             errors={errors.name}
@@ -68,6 +51,7 @@ function Register({ validate, signUp }) {
             name='email'
             label='E-mail'
             type='email'
+            autoComplete='email'
             value={values.email || ''}
             onChange={handleChange}
             errors={errors.email}
@@ -77,6 +61,7 @@ function Register({ validate, signUp }) {
             name='password'
             label='Пароль'
             type='password'
+            autoComplete='new-password'
             value={values.password || ''}
             onChange={handleChange}
             errors={errors.password}

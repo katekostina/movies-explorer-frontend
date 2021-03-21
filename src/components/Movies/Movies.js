@@ -3,17 +3,33 @@ import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import SearchInfo from '../SearchInfo/SearchInfo';
 
-function Movies({ search, preloading, filteredMovies, keyWord, searchResult }) {
+function Movies({
+  search,
+  preloading,
+  filteredMovies,
+  inputKeyString,
+  searchResult,
+  mySavedMovies,
+  handleMovieSave,
+  handleMovieDelete,
+}) {
   return (
     <section>
-      <SearchForm search={search} keyWord={keyWord} />
+      <SearchForm search={search} inputKeyString={inputKeyString} />
       {preloading && <Preloader />}
-      {filteredMovies.length > 0 && (
-        <MoviesCardList place='all-movies' movies={filteredMovies} />
+      {filteredMovies && filteredMovies.length > 0 && (
+        <MoviesCardList
+          place='all-movies'
+          moviesToRender={filteredMovies}
+          mySavedMovies={mySavedMovies}
+          handleMovieSave={handleMovieSave}
+          handleMovieDelete={handleMovieDelete}
+        />
       )}
-      {keyWord && !preloading && filteredMovies.length === 0 && (
-        <SearchInfo text={searchResult} />
-      )}
+      {inputKeyString &&
+        !preloading &&
+        filteredMovies &&
+        filteredMovies.length === 0 && <SearchInfo text={searchResult} />}
     </section>
   );
 }

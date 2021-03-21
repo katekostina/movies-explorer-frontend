@@ -33,6 +33,51 @@ class MainApi {
       }),
     }).then(handleOriginalResponse);
   }
+
+  getAllSavedMovies() {
+    return fetch(`${this._baseUrl}/movies`, { headers: this._headers }).then(
+      handleOriginalResponse
+    );
+  }
+
+  postMovie(
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN
+  ) {
+    return fetch(`${this._baseUrl}/movies`, {
+      method: 'POST',
+      headers: this._headers,
+      body: JSON.stringify({
+        country: country,
+        director: director,
+        duration: duration,
+        year: year,
+        description: description,
+        image: image,
+        trailer: trailer,
+        thumbnail: thumbnail,
+        movieId: movieId,
+        nameRU: nameRU,
+        nameEN: nameEN,
+      }),
+    }).then(handleOriginalResponse);
+  }
+
+  deleteMovie(_id) {
+    return fetch(`${this._baseUrl}/movies/${_id}`, {
+      method: 'DELETE',
+      headers: this._headers,
+    }).then(handleOriginalResponse);
+  }
 }
 
 // helper

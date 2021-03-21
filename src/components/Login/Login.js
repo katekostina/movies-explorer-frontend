@@ -9,19 +9,7 @@ import './Login.css';
 function Login({ initialValues, validate, signIn }) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-  const [submitPossible, setSubmitPossible] = useState(false);
-
-  useEffect(() => {
-    if (errors && Object.keys(errors).length === 0) {
-      setSubmitPossible(true);
-    } else {
-      setSubmitPossible(false);
-    }
-  }, [errors]);
-
-  useEffect(() => {
-    setValues(initialValues);
-  }, [initialValues]);
+  const [submitPossible, setSubmitPossible] = useState(true);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -53,6 +41,7 @@ function Login({ initialValues, validate, signIn }) {
             name='email'
             label='E-mail'
             type='email'
+            autoComplete='username'
             value={values.email || ''}
             onChange={handleChange}
             errors={errors.email}
@@ -62,6 +51,7 @@ function Login({ initialValues, validate, signIn }) {
             name='password'
             label='Пароль'
             type='password'
+            autoComplete='current-password'
             value={values.password || ''}
             onChange={handleChange}
             errors={errors.password}

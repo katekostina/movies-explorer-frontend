@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function Profile({ signOut, history, validate, updateProfile }) {
+function Profile({ signOut, validate, updateProfile }) {
   const currentUser = useContext(CurrentUserContext);
   const [submitPossible, setSubmitPossible] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -58,7 +58,7 @@ function Profile({ signOut, history, validate, updateProfile }) {
   return (
     <form className='profile' onSubmit={handleEditProfile}>
       <div className='profile__info'>
-        <h1 className='profile__heading'>Привет, Катя!</h1>
+        <h1 className='profile__heading'>Привет, {currentUser.name}!</h1>
         <div className='profile__unit'>
           <label className='profile__key' htmlFor='profile-name'>
             Имя

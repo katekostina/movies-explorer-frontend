@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import './SearchForm.css';
-import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-function SearchForm({ search, keyWord }) {
+function SearchForm({ search, inputKeyString }) {
   const [error, setError] = useState();
-  const [inputValue, setInputValue] = useState(keyWord);
+  const [inputValue, setInputValue] = useState(inputKeyString);
+  const [onlyShortFilms, setOnlyShortFilms] = useState(false);
 
   function handleChange(e) {
     clearError();
     setInputValue(e.target.value);
+  }
+
+  function handleSwitch(e) {
+    setOnlyShortFilms(!onlyShortFilms);
   }
 
   function handleSearch(e) {
@@ -20,7 +24,7 @@ function SearchForm({ search, keyWord }) {
     } else if (inputValue.length < 3) {
       setError('Введите не менее трёх букв');
     } else {
-      search(inputValue);
+      search(inputValue, onlyShortFilms);
     }
   }
 
@@ -48,7 +52,17 @@ function SearchForm({ search, keyWord }) {
         </button>
       </fieldset>
       {error && <p className='search-form__error'>{error}</p>}
-      <FilterCheckbox label='Короткометражки' />
+
+      <label className='filter-checkbox'>
+        <input
+          className='filter-checkbox__default'
+          type='checkbox'
+          checked={onlyShortFilms || false}
+          onChange={handleSwitch}
+        />
+        <span className='filter-checkbox__slider' />
+        <span className='filter-checkbox__label'>Короткометражки</span>
+      </label>
       <hr className='search-form__line' />
     </form>
   );

@@ -1,10 +1,30 @@
 import src from '../../images/movie.png';
 import { BASE_MOVIES_URL } from '../../constants';
-import { Link } from 'react-router-dom';
 import './MovieCard.css';
 
-function MovieCard({ movieData, place, isSaved }) {
-  const { nameRU, duration, image, trailerLink } = movieData;
+function MovieCard({
+  movieData,
+  place,
+  isSaved,
+  handleMovieDelete,
+  handleMovieSave,
+}) {
+  const { nameRU, duration, image, trailerLink, trailer } = movieData;
+
+  let imageUrl;
+  let trailerUrl;
+  switch (place) {
+    case 'all-movies':
+      imageUrl = image ? BASE_MOVIES_URL + image.url : src;
+      trailerUrl = trailerLink ? trailerLink : '#';
+      break;
+    case 'saved-movies':
+      imageUrl = image ? image : src;
+      trailerUrl = trailer ? trailer : '#';
+      break;
+    default:
+      break;
+  }
 
   function formatDuration(duration) {
     const hours = Math.floor(duration / 60);
@@ -25,15 +45,23 @@ function MovieCard({ movieData, place, isSaved }) {
   }
   const formattedDuration = formatDuration(duration);
 
+  function movieDelete(params) {
+    handleMovieDelete(movieData);
+  }
+
+  function movieSave(params) {
+    handleMovieSave(movieData);
+  }
+
   return (
     <figure className='movie-card'>
       <a
         className='movie-card__link'
-        href={trailerLink ? trailerLink : '#'}
+        href={trailerUrl}
         target='_blank'
         rel='noreferrer'>
         <img
-          src={image ? BASE_MOVIES_URL + image.url : src}
+          src={imageUrl}
           alt={nameRU ? nameRU : 'Фильм без названия'}
           className='movie-card__image'
         />
@@ -48,7 +76,10 @@ function MovieCard({ movieData, place, isSaved }) {
         </div>
 
         {place === 'saved-movies' && (
-          <button className='movie-card__btn movie-card__btn_type_cross' />
+          <button
+            className='movie-card__btn movie-card__btn_type_cross'
+            onClick={movieDelete}
+          />
         )}
 
         {place === 'all-movies' && (
@@ -56,6 +87,7 @@ function MovieCard({ movieData, place, isSaved }) {
             className={`movie-card__btn movie-card__btn_type_${
               isSaved ? 'full-heart' : 'empty-heart'
             }`}
+            onClick={isSaved ? movieDelete : movieSave}
           />
         )}
       </figcaption>

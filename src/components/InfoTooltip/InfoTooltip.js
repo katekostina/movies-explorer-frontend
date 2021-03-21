@@ -1,9 +1,7 @@
 import './InfoTooltip.css';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 function InfoTooltip({ isOpen, isSuccessful, onClose, positiveMessage }) {
-  const history = useHistory();
   function handleClose() {
     onClose();
   }

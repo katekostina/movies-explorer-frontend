@@ -17,22 +17,28 @@ import validate from '../../utils/formValidation';
 import moviesApi from '../../utils/MoviesApi';
 import authApi from '../../utils/AuthApi';
 import mainApi from '../../utils/MainApi';
+import { BASE_MOVIES_URL } from '../../constants';
+import src from '../../images/movie.png';
 
 function App() {
   const history = useHistory();
-  const [isLogged, setIsLogged] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
 
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [preloading, setPreloading] = useState(false);
-  const [keyWord, setKeyWord] = useState(
-    localStorage.getItem('searchInputString' || '')
+  // for authorization
+  const enteredPath = history.location.pathname;
+  const [isLogged, setIsLogged] = useState(false);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem('userData')) || null
   );
-  const [searchResult, setSearchResult] = useState('');
-  const [storedValues, setStoredValues] = useState({
-    email: '',
-    password: '',
-  });
+
+  // for film search
+  const [inputKeyStringAll, setInputKeyStringAll] = useState('');
+  const [onlyShortFilmsAll, setOnlyShortFilmsAll] = useState(false);
+  const [allMovies, setAllMovies] = useState(
+    JSON.parse(localStorage.getItem('allMovies')) || null
+  );
+  const [filteredAllMovies, setFilteredAllMovies] = useState(null);
+  const [preloading, setPreloading] = useState(false);
+  const [searchAllResultMessage, setSearchAllResultMessage] = useState('');
 
   // for InfoToolTip
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
@@ -40,6 +46,13 @@ function App() {
   const [infoTooltipPositiveMessage, setInfoTooltipPositiveMessage] = useState(
     ''
   );
+
+  // saved movies
+  const [mySavedMovies, setMySavedMovies] = useState(null);
+  const [filteredMySavedMovies, setFilteredMySavedMovies] = useState(null);
+  const [searchSavedResultMessage, setSearchSavedResultMessage] = useState('');
+  const [inputKeyStringSaved, setInputKeyStringSaved] = useState('');
+  const [onlyShortFilmsSaved, setOnlyShortFilmsSaved] = useState(false);
 
   // on App did mount
   useEffect(() => {
@@ -49,73 +62,50 @@ function App() {
       authorize(token);
     } else {
       console.log('token is empty');
-      const email = localStorage.getItem('email');
-      const password = localStorage.getItem('password');
-      setStoredValues({ email: email, password: password });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (isLogged) {
+    if (allMovies && inputKeyStringAll) {
+      setFilteredAllMovies(
+        filterMovies(
+          inputKeyStringAll,
+          onlyShortFilmsAll,
+          allMovies,
+          setSearchAllResultMessage
+        )
+      );
+    }
+  }, [inputKeyStringAll, onlyShortFilmsAll, allMovies]);
+
+  useEffect(() => {
+    if (mySavedMovies && inputKeyStringSaved) {
+      setFilteredMySavedMovies(
+        filterMovies(
+          inputKeyStringSaved,
+          onlyShortFilmsSaved,
+          mySavedMovies,
+          setSearchSavedResultMessage
+        )
+      );
+    }
+  }, [inputKeyStringSaved, onlyShortFilmsSaved, mySavedMovies]);
+
+  useEffect(() => {
+    if (currentUser) {
+      setPreloading(true);
       mainApi
-        .getUserProfile()
+        .getAllSavedMovies()
         .then((data) => {
-          setCurrentUser(data.data);
+          setMySavedMovies(filterSavedMovies(data.data));
+          setPreloading(false);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     }
-  }, [isLogged]);
-
-  function filterMovies(key, movies) {
-    const trimmedKey = key.trim().replace(/[-/\\^$*+?.()|[\]{}]/g, '');
-    const reg = new RegExp(trimmedKey, 'gim');
-
-    const filtered = movies.filter((movie) => {
-      const {
-        nameRU = '',
-        nameEN = '',
-        director = '',
-        description = '',
-      } = movie;
-      return (
-        (nameRU && nameRU.search(reg) >= 0) ||
-        (nameEN && nameEN.search(reg) >= 0) ||
-        (director && director.search(reg) >= 0) ||
-        (description && description.search(reg) >= 0)
-      );
-    });
-    return filtered;
-  }
-
-  function handleSearch(inputString) {
-    setKeyWord(inputString);
-    localStorage.setItem('searchInputString', inputString);
-    setFilteredMovies([]);
-    setPreloading(true);
-    moviesApi
-      .getMovies()
-      .then((data) => {
-        return filterMovies(inputString, data);
-      })
-      .then((filtered) => {
-        setPreloading(false);
-        setFilteredMovies(filtered);
-        if (filtered.length > 0) {
-          setSearchResult(`Найдено ${filtered.length} фильмов`);
-        } else {
-          setSearchResult('Ничего не найдено');
-        }
-      })
-      .catch((error) => {
-        setSearchResult(
-          'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-        );
-        console.log(error);
-      });
-  }
+  }, [currentUser]);
 
   function signUp(email, password, name) {
     clearInfoTooltip();
@@ -147,10 +137,10 @@ function App() {
         localStorage.setItem('token', data.token);
         mainApi.setToken(data.token);
         setIsLogged(true);
-        localStorage.setItem('email', email);
-        localStorage.setItem('password', password);
-        setStoredValues({ email: email, password: password });
         history.push('/movies');
+      })
+      .then(() => {
+        loadUserData();
       })
       .catch((error) => {
         switch (error.status) {
@@ -168,23 +158,49 @@ function App() {
 
   function signOut() {
     setIsLogged(false);
+
     localStorage.removeItem('token');
     mainApi.removeToken();
+
+    localStorage.removeItem('allMovies');
+    setAllMovies(null);
+    setFilteredAllMovies(null);
+    setMySavedMovies(null);
+    setFilteredMySavedMovies(null);
+
+    localStorage.removeItem('userData');
+    setCurrentUser(null);
+    setInputKeyStringAll('');
+    setInputKeyStringSaved('');
+
     history.push('/');
+  }
+
+  function loadUserData() {
+    mainApi
+      .getUserProfile()
+      .then((data) => {
+        localStorage.setItem('userData', JSON.stringify(data.data));
+        setCurrentUser(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   function authorize(token) {
     authApi
       .checkToken(token)
       .then((res) => {
-        mainApi.setToken(token);
         setIsLogged(true);
-        // restore last search from local storage
-        if (keyWord) {
-          handleSearch(keyWord);
-        }
+        mainApi.setToken(token);
+      })
+      .then(() => {
+        loadUserData();
+        history.push(enteredPath);
       })
       .catch((error) => {
+        setIsLogged(false);
         switch (error.status) {
           case 400:
             console.error(
@@ -192,10 +208,12 @@ function App() {
             );
             break;
           case 401:
-            console.error(error.status + ': Переданный токен некорректе.');
+            console.error(
+              error.status + ': Переданный токен некорректен или просрочен.'
+            );
             break;
           default:
-            console.error(error.status + ': произошла ошибка.');
+            console.error('Произошла ошибка:', error);
         }
       });
   }
@@ -205,6 +223,7 @@ function App() {
     mainApi
       .patchUserProfile(name, email)
       .then((data) => {
+        localStorage.setItem('userData', JSON.stringify(data.data));
         setCurrentUser(data.data);
         setIsInfoTooltipOpen(true);
         setInfoTooltipPositiveMessage('Новые данные профиля сохранены');
@@ -217,6 +236,74 @@ function App() {
       });
   }
 
+  function filterSavedMovies(movies) {
+    const myId = currentUser._id;
+    const myMovies = movies.filter((movie) => {
+      const { owner = '' } = movie;
+      return myId === owner;
+    });
+    return myMovies;
+  }
+
+  function filterMovies(
+    inputKeyString,
+    onlyShortFilms,
+    notFilteredMovies,
+    setSearchResultMessage
+  ) {
+    const trimmedKey = inputKeyString
+      .trim()
+      .replace(/[-/\\^$*+?.()|[\]{}]/g, '');
+    const reg = new RegExp(trimmedKey, 'gim');
+    const filtered = notFilteredMovies.filter((movie) => {
+      const {
+        nameRU = '',
+        nameEN = '',
+        director = '',
+        description = '',
+        duration = 0,
+      } = movie;
+      return (
+        ((nameRU && nameRU.search(reg) >= 0) ||
+          (nameEN && nameEN.search(reg) >= 0) ||
+          (director && director.search(reg) >= 0) ||
+          (description && description.search(reg) >= 0)) &&
+        (onlyShortFilms ? duration <= 40 : true)
+      );
+    });
+    if (filtered.length === 0) {
+      setSearchResultMessage('Ничего не найдено');
+    }
+    return filtered;
+  }
+
+  function searchAllMovies(inputString, onlyShortFilms) {
+    setInputKeyStringAll(inputString);
+    setOnlyShortFilmsAll(onlyShortFilms);
+
+    if (!allMovies) {
+      setPreloading(true);
+      moviesApi
+        .getMovies()
+        .then((data) => {
+          localStorage.setItem('allMovies', JSON.stringify(data));
+          setAllMovies(data);
+          setPreloading(false);
+        })
+        .catch((error) => {
+          setSearchAllResultMessage(
+            'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+          );
+          console.error(error);
+        });
+    }
+  }
+
+  function searchSavedMovies(inputString, onlyShortFilms) {
+    setInputKeyStringSaved(inputString);
+    setOnlyShortFilmsSaved(onlyShortFilms);
+  }
+
   function closeInfoTooltip() {
     setIsInfoTooltipOpen(false);
   }
@@ -224,6 +311,98 @@ function App() {
   function clearInfoTooltip() {
     setInfoTooltipPositiveMessage('');
     setIsResponseSuccessful();
+  }
+
+  function handleMovieSave(movie) {
+    mainApi
+      .postMovie(
+        movie.country || 'unknown',
+        movie.director || 'unknown',
+        movie.duration || 0,
+        movie.year || 'unknown',
+        movie.description || 'unknown',
+        movie.image.url ? BASE_MOVIES_URL + movie.image.url : src,
+        movie.trailerLink ||
+          `https://www.youtube.com/results?search_query=трейлер+фильма+${
+            movie.nameRU.replace(/ /g, '+') || movie.nameEN.replace(/ /g, '+')
+          }`,
+        movie.image.formats.thumbnail.url
+          ? BASE_MOVIES_URL + movie.image.formats.thumbnail.url
+          : src,
+        movie.id,
+        movie.nameRU || 'unknown',
+        movie.nameEN || 'unknown'
+      )
+      .then((savedMovie) => {
+        setFilteredAllMovies(
+          filterMovies(
+            inputKeyStringAll,
+            onlyShortFilmsAll,
+            allMovies,
+            setSearchAllResultMessage
+          )
+        );
+        mainApi
+          .getAllSavedMovies()
+          .then((data) => {
+            return filterSavedMovies(data.data);
+          })
+          .then((myMovies) => {
+            setMySavedMovies(myMovies);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function handleMovieDeleteOnAllMoviesPage(movie) {
+    const matchedSavedMovie = mySavedMovies.find(
+      (savedMovie) => savedMovie.movieId === movie.id
+    );
+    deleteMovie(matchedSavedMovie._id);
+  }
+
+  function handleMovieDeleteOnSavedMoviesPage(movie) {
+    deleteMovie(movie._id);
+  }
+
+  function deleteMovie(_id) {
+    mainApi
+      .deleteMovie(_id)
+      .then((data) => {
+        if (
+          data.deleteInfo.n === 1 &&
+          data.deleteInfo.ok === 1 &&
+          data.deleteInfo.deletedCount === 1
+        ) {
+          setFilteredAllMovies(
+            filterMovies(
+              inputKeyStringAll,
+              onlyShortFilmsAll,
+              allMovies,
+              setSearchAllResultMessage
+            )
+          );
+          mainApi
+            .getAllSavedMovies()
+            .then((data) => {
+              return filterSavedMovies(data.data);
+            })
+            .then((myMovies) => {
+              setMySavedMovies(myMovies);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+          console.error('Что-то пошло не так при удалении фильма.', data);
+        }
+      })
+      .catch((error) => console.error(error));
   }
 
   return (
@@ -238,7 +417,7 @@ function App() {
 
           <Route path='/signin'>
             <Login
-              initialValues={storedValues}
+              initialValues={currentUser || {}}
               validate={validate}
               signIn={signIn}
             />
@@ -255,7 +434,6 @@ function App() {
             <Header isNavigation={isLogged} />
             <Profile
               signOut={signOut}
-              history={history}
               validate={validate}
               updateProfile={updateProfile}
             />
@@ -267,11 +445,14 @@ function App() {
             hasPermission={isLogged}>
             <Header isNavigation={isLogged} />
             <Movies
-              search={handleSearch}
               preloading={preloading}
-              filteredMovies={filteredMovies}
-              keyWord={keyWord}
-              searchResult={searchResult}
+              search={searchAllMovies}
+              filteredMovies={filteredAllMovies}
+              mySavedMovies={mySavedMovies}
+              inputKeyString={inputKeyStringAll}
+              searchResult={searchAllResultMessage}
+              handleMovieSave={handleMovieSave}
+              handleMovieDelete={handleMovieDeleteOnAllMoviesPage}
             />
             <Footer />
           </ProtectedRoute>
@@ -281,7 +462,15 @@ function App() {
             redirectTo='/signin'
             hasPermission={isLogged}>
             <Header isNavigation={isLogged} />
-            <SavedMovies preloading={preloading} />
+            <SavedMovies
+              preloading={preloading}
+              search={searchSavedMovies}
+              mySavedMovies={mySavedMovies}
+              inputKeyString={inputKeyStringSaved}
+              searchResult={searchSavedResultMessage}
+              handleMovieDelete={handleMovieDeleteOnSavedMoviesPage}
+              filteredMySavedMovies={filteredMySavedMovies}
+            />
             <Footer />
           </ProtectedRoute>
 
