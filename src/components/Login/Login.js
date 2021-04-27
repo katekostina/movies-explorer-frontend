@@ -3,13 +3,13 @@ import Input from '../Input/Input';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import Form from '../Form/Form';
 import SignNav from '../SignNav/SignNav';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Login.css';
 
-function Login({ initialValues, validate }) {
+function Login({ initialValues, validate, signIn }) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [submitPossible, setSubmitPossible] = useState(true);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -17,34 +17,33 @@ function Login({ initialValues, validate }) {
       ...values,
       [name]: value,
     });
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-  }
 
-  function handleBlur(e) {
-    const { name, value } = e.target;
     const { [name]: removedError, ...rest } = errors;
     const error = validate[name](value);
     setErrors({
       ...rest,
-      ...(error && { [name]: touched[name] && error }),
+      ...(error && { [name]: values[name] && error }),
     });
+  }
+
+  function handleSignIn(e) {
+    e.preventDefault();
+    const { email, password } = values;
+    signIn(email, password);
   }
 
   return (
     <section className='login'>
       <FormHeader text='Рады видеть!' />
-      <Form>
+      <Form onSubmit={handleSignIn}>
         <div>
           <Input
             name='email'
             label='E-mail'
             type='email'
-            value={values.email}
+            autoComplete='username'
+            value={values.email || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
             errors={errors.email}
             placeholder='name@some.io'
           />
@@ -52,14 +51,14 @@ function Login({ initialValues, validate }) {
             name='password'
             label='Пароль'
             type='password'
-            value={values.password}
+            autoComplete='current-password'
+            value={values.password || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
             errors={errors.password}
             placeholder='пароль из не менее чем восьми символов'
           />
         </div>
-        <SubmitButton label='Войти' />
+        <SubmitButton submitPossible={submitPossible} label='Войти' />
       </Form>
       <SignNav
         label='Ещё не зарегистрированы?'

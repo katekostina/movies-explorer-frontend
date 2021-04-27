@@ -9,6 +9,7 @@ function Input({
   name,
   errors,
   placeholder,
+  autoComplete,
 }) {
   return (
     <label className='input__outside'>
@@ -21,6 +22,7 @@ function Input({
         onBlur={onBlur}
         name={name}
         placeholder={placeholder}
+        autoComplete={autoComplete}
       />
       {errors && <p className='input__error'>{errors}</p>}
     </label>

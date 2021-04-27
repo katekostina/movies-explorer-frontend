@@ -3,13 +3,13 @@ import Form from '../Form/Form';
 import Input from '../Input/Input';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import SignNav from '../SignNav/SignNav';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Register.css';
 
-function Register({ validate }) {
+function Register({ validate, signUp }) {
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const [submitPossible, setSubmitPossible] = useState(true);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -17,59 +17,61 @@ function Register({ validate }) {
       ...values,
       [name]: value,
     });
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-  }
 
-  function handleBlur(e) {
-    const { name, value } = e.target;
     const { [name]: removedError, ...rest } = errors;
     const error = validate[name](value);
     setErrors({
       ...rest,
-      ...(error && { [name]: touched[name] && error }),
+      ...(error && { [name]: values[name] && error }),
     });
+  }
+
+  function handleSignUp(e) {
+    e.preventDefault();
+    const { email, password, name } = values;
+    signUp(email, password, name);
   }
 
   return (
     <section className='register'>
       <FormHeader text='Добро пожаловать!' />
-      <Form>
+      <Form onSubmit={handleSignUp}>
         <div>
           <Input
             name='name'
             label='Имя'
             type='text'
-            value={values.name}
+            autoComplete='username'
+            value={values.name || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
             errors={errors.name}
-            placeholder='Самый сладкий пирожок'
+            placeholder='Самый сладкий кренделёк'
           />
           <Input
             name='email'
             label='E-mail'
             type='email'
-            value={values.email}
+            autoComplete='email'
+            value={values.email || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
             errors={errors.email}
-            placeholder='pirozhok@world.io'
+            placeholder='krendel@world.io'
           />
           <Input
             name='password'
             label='Пароль'
             type='password'
-            value={values.password}
+            autoComplete='new-password'
+            value={values.password || ''}
             onChange={handleChange}
-            onBlur={handleBlur}
             errors={errors.password}
-            placeholder='Придумайте пароль покрепче.'
+            placeholder='Придумайте пароль покрепче'
           />
         </div>
-        <SubmitButton label='Зарегистрироваться' />
+        <SubmitButton
+          submitPossible={submitPossible}
+          label='Зарегистрироваться'
+        />
       </Form>
       <SignNav label='Уже зарегистрированы?' link='Войти' to='/signin' />
     </section>

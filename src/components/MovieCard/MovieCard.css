@@ -11,6 +11,12 @@
   margin-bottom: 20px;
 }
 
+.movie-card__link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
 .movie-card__image {
   max-width: 100%;
   height: 168px;
@@ -110,7 +116,11 @@
     max-height: 122px;
     margin: 6px;
     box-sizing: border-box;
+  }
+
+  .movie-card__link {
     order: 1;
+    margin: 0;
   }
 
   .movie-card__caption {

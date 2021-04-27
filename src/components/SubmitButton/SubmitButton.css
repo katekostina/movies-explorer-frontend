@@ -1,6 +1,5 @@
 .submit-button {
   border: none;
-  background-color: #2be080;
   border-radius: 3px;
   padding: 15px;
   color: #fff;
@@ -11,8 +10,20 @@
   margin-top: 20px;
 }
 
-.submit-button:hover {
+.submit-button_active_true {
+  background-color: #2be080;
+}
+
+.submit-button_active_false {
+  background-color: #888;
+}
+
+.submit-button_active_true:hover {
   cursor: pointer;
+}
+
+.submit-button_active_false:hover {
+  cursor: not-allowed;
 }
 
 .submit-button:focus {

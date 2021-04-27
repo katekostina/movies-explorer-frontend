@@ -21,13 +21,9 @@ function Navigation() {
   }
 
   useEffect(() => {
-    window.addEventListener('resize', () => {
-      updateScreenType();
-    });
+    window.addEventListener('resize', updateScreenType);
     return () => {
-      window.removeEventListener('resize', () => {
-        updateScreenType();
-      });
+      window.removeEventListener('resize', updateScreenType);
     };
   }, []);
 

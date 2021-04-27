@@ -3,6 +3,7 @@ import './NoMatch.css';
 
 function NoMatch() {
   const history = useHistory();
+
   function goToPreviousPath() {
     history.goBack();
   }

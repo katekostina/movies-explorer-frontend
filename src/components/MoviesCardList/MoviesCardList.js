@@ -1,30 +1,64 @@
-import src from '../../images/movie.png';
 import './MoviesCardList.css';
 import MovieCard from '../MovieCard/MovieCard';
+import { useState } from 'react';
 
-function MoviesCardList({ place }) {
+function MoviesCardList({
+  place,
+  moviesToRender,
+  mySavedMovies,
+  handleMovieSave,
+  handleMovieDelete,
+}) {
+  const [showMovies, setShowMovies] = useState(4);
+  function handleMore() {
+    setShowMovies(Math.min(moviesToRender.length, showMovies + 4));
+  }
+
+  const idsOfMySavedMovies = {};
+  if (place === 'all-movies') {
+    for (const movie of mySavedMovies) {
+      idsOfMySavedMovies[movie.movieId] = true;
+    }
+  }
+
   return (
     <section className='movies-card-list'>
-      <MovieCard
-        movie={{
-          src: src,
-          title:
-            'Не грози южному централу, попивая сок у себя в квартале. Не грози южному централу, попивая сок у себя в квартале',
-          length: '1ч 29м',
-        }}
-        place={place}
-        isSaved={true}
-      />
-      <MovieCard
-        movie={{
-          src: src,
-          title: 'Не грози южному централу, попивая сок у себя в квартале',
-          length: '1ч 29м',
-        }}
-        place={place}
-        isSaved={false}
-      />
-      <button className='movies-card-list__more'>Ещё</button>
+      {moviesToRender &&
+        moviesToRender.slice(0, showMovies).map((movie) => {
+          let isSaved;
+          switch (place) {
+            case 'all-movies':
+              if (idsOfMySavedMovies[movie.id]) {
+                isSaved = true;
+              } else {
+                isSaved = false;
+              }
+              break;
+            case 'saved-movies':
+              isSaved = true;
+              break;
+            default:
+              console.error('Что-то пошло не так.');
+              break;
+          }
+
+          return (
+            <MovieCard
+              movieData={movie}
+              place={place}
+              isSaved={isSaved}
+              key={movie.id || movie.movieId}
+              handleMovieDelete={handleMovieDelete}
+              handleMovieSave={handleMovieSave}
+            />
+          );
+        })}
+
+      {moviesToRender && moviesToRender.length > showMovies && (
+        <button className='movies-card-list__more' onClick={handleMore}>
+          Ещё
+        </button>
+      )}
     </section>
   );
 }
