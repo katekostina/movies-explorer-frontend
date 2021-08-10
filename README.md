@@ -5,4 +5,8 @@ Uses node.js server to store data to MongoDB Atlas, and api to get set of movies
 ### Published
 https://movies-explorer-frontend.herokuapp.com/
 
+### Guest account
+friend@mail.com
+12345678
+
 <img align="left" width="800px" src="https://github.com/katekostina/movies-explorer-frontend/blob/main/movies.gif"> <br />
